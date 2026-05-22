@@ -49,12 +49,9 @@ function LoginPage() {
         return toast.error("Please fill all fields");
       }
 
-      const response = await api.post(
-        "http://localhost:8000/api/users/login",
-        formData,
-      );
+      const response = await api.post("/api/users/login", formData);
 
-      const userData = response?.data?.data;
+      const userData = response?.data?.user;
 
       // SAVE USER + PERSISTENCE
       login(userData);
@@ -149,7 +146,7 @@ function LoginPage() {
         {/* TITLE */}
 
         {/* FORM */}
-        <form onSubmit={handleSubmit} className="space-y-7">
+        <form autoComplete="off" onSubmit={handleSubmit} className="space-y-7">
           {/* EMAIL */}
           <div className="relative">
             <Mail
@@ -166,6 +163,7 @@ function LoginPage() {
 
             <input
               type="email"
+              autoComplete="new-email"
               placeholder="Enter your email"
               name="email"
               value={formData.email}
@@ -207,6 +205,7 @@ function LoginPage() {
 
             <input
               type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
               placeholder="Enter your password"
               name="password"
               value={formData.password}
