@@ -60,6 +60,13 @@ function LoginPage() {
 
       router.push("/dashboard");
     } catch (error) {
+      console.log(error);
+
+      setFormData({
+        email: formData.email,
+        password: "",
+      });
+
       toast.error(error?.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
@@ -163,7 +170,7 @@ function LoginPage() {
 
             <input
               type="email"
-              autoComplete="new-email"
+              autoComplete="email"
               placeholder="Enter your email"
               name="email"
               value={formData.email}
@@ -205,7 +212,7 @@ function LoginPage() {
 
             <input
               type={showPassword ? "text" : "password"}
-              autoComplete="new-password"
+              autoComplete="current-password"
               placeholder="Enter your password"
               name="password"
               value={formData.password}
@@ -250,21 +257,7 @@ function LoginPage() {
           </div>
 
           {/* OPTIONS */}
-          <div className="flex items-center justify-between">
-            <label
-              className="
-              flex
-              items-center
-              gap-3
-              text-gray-400
-              text-sm
-              cursor-pointer
-              "
-            >
-              <input type="checkbox" className="accent-blue-500" />
-              Remember me
-            </label>
-
+          <div className="flex items-center justify-end">
             <Link
               href="/forgot-password"
               className="

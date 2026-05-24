@@ -1,4 +1,9 @@
 "use client";
+import { useEffect } from "react";
+
+import { useRouter } from "next/navigation";
+
+import { useAuth } from "@/context/AuthContext";
 
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
@@ -7,6 +12,18 @@ import PostCard from "@/components/PostCard";
 import RightSidebar from "@/components/RightSidebar";
 
 function DashboardPage() {
+  const { user, loading } = useAuth();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [user, loading, router]);
+  if (loading || !user) {
+    return null;
+  }
   return (
     <div
       className="

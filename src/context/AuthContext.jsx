@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
+import axios from "axios";
+
 import { connectSocket, disconnectSocket } from "@/lib/socket";
 
 const AuthContext = createContext();
@@ -20,6 +22,9 @@ export const AuthProvider = ({ children }) => {
         const parsedUser = JSON.parse(storedUser);
 
         setUser(parsedUser);
+
+        // RECONNECT SOCKET AFTER REFRESH
+        connectSocket(parsedUser?._id);
       }
     } catch (error) {
       console.log("Persistence Error:", error);
@@ -39,15 +44,26 @@ export const AuthProvider = ({ children }) => {
     // CONNECT SOCKET
     connectSocket(userData?._id);
   };
-
   // LOGOUT
-  const logout = () => {
-    localStorage.removeItem("user");
+  const logout = async () => {
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/logout`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+    } catch (error) {
+      console.log("Logout Error:", error);
+    } finally {
+      localStorage.removeItem("user");
 
-    // DISCONNECT SOCKET
-    disconnectSocket();
+      // DISCONNECT SOCKET
+      disconnectSocket();
 
-    setUser(null);
+      setUser(null);
+    }
   };
 
   return (

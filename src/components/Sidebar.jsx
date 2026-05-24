@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import {
   House,
@@ -11,8 +12,17 @@ import {
   LogOut,
   Compass,
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 function Sidebar() {
+  const { logout } = useAuth();
+  const router = useRouter();
+  const handleLogout = async () => {
+    await logout();
+
+    router.push("/login");
+  };
+
   const menuItems = [
     {
       name: "Home",
@@ -151,6 +161,7 @@ function Sidebar() {
       {/* BOTTOM SECTION */}
       <div className="mt-auto pt-10">
         <button
+          onClick={handleLogout}
           className="
           w-full
           h-[72px]

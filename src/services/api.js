@@ -10,34 +10,36 @@ const api = axios.create({
   },
 });
 
-// REQUEST INTERCEPTOR
-api.interceptors.request.use(
-  (config) => {
-    const storedUser = localStorage.getItem("user");
-
-    const user =
-      storedUser && storedUser !== "undefined" ? JSON.parse(storedUser) : null;
-
-    if (user?.accessToken) {
-      config.headers.Authorization = `Bearer ${user.accessToken}`;
-    }
-
-    return config;
-  },
-
-  (error) => Promise.reject(error),
-);
-
 // RESPONSE INTERCEPTOR
 api.interceptors.response.use(
   (response) => response,
 
   async (error) => {
-    // AUTO LOGOUT
-    if (error.response?.status === 401) {
-      localStorage.removeItem("user");
+    const originalRequest = error.config;
 
-      window.location.href = "/login";
+    // ACCESS TOKEN EXPIRED
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        // REFRESH ACCESS TOKEN
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/users/refresh-token`,
+          {},
+          {
+            withCredentials: true,
+          },
+        );
+
+        // RETRY ORIGINAL REQUEST
+        return api(originalRequest);
+      } catch (refreshError) {
+        localStorage.removeItem("user");
+
+        window.location.href = "/login";
+
+        return Promise.reject(refreshError);
+      }
     }
 
     return Promise.reject(error);
