@@ -53,8 +53,8 @@ function ResetPasswordPage() {
         return toast.error("Please fill all fields");
       }
 
-      if (otp.length !== 6) {
-        return toast.error("OTP must be 6 digits");
+      if (otp.length !== 5) {
+        return toast.error("OTP must be 5 digits");
       }
 
       if (newPassword !== confirmPassword) {

@@ -1,8 +1,12 @@
 "use client";
 
-import { Bell, Search, Send } from "lucide-react";
+import { Bell, Search, Send, Moon, Sun } from "lucide-react";
+
+import { useTheme } from "@/context/ThemeContext";
 
 function Topbar() {
+  const { darkMode, toggleTheme } = useTheme();
+
   return (
     <div
       className="
@@ -52,6 +56,31 @@ function Topbar() {
 
       {/* RIGHT */}
       <div className="flex items-center gap-5">
+        {/* THEME TOGGLE */}
+        <button
+          onClick={toggleTheme}
+          className="
+          w-[58px]
+          h-[58px]
+          rounded-2xl
+          bg-white/[0.04]
+          border
+          border-white/10
+          flex
+          items-center
+          justify-center
+          hover:bg-white/[0.08]
+          transition-all
+          duration-300
+          "
+        >
+          {darkMode ? (
+            <Sun className="w-5 h-5 text-yellow-400" />
+          ) : (
+            <Moon className="w-5 h-5 text-black" />
+          )}
+        </button>
+
         {/* MESSAGE */}
         <button
           className="
