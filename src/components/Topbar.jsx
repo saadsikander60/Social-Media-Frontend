@@ -1,12 +1,11 @@
 "use client";
 
-import { Bell, Search, Send, Moon, Sun } from "lucide-react";
-
-import { useTheme } from "@/context/ThemeContext";
+import { Bell, Search, Send } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 function Topbar() {
-  const { darkMode, toggleTheme } = useTheme();
-
+  const { user } = useAuth();
+  console.log(user);
   return (
     <div
       className="
@@ -14,7 +13,7 @@ function Topbar() {
       h-[90px]
       bg-white/[0.04]
       border
-      border-white/10
+      border-black/5
       backdrop-blur-3xl
       rounded-[30px]
       px-7
@@ -32,14 +31,17 @@ function Topbar() {
         gap-4
         bg-white/[0.04]
         border
-        border-white/10
+        border-black/5
         rounded-2xl
         h-[58px]
         px-5
         w-[420px]
         "
       >
-        <Search className="w-5 h-5 text-gray-500" />
+        <Search
+          className="w-5 h-5 text-white
+        "
+        />
 
         <input
           type="text"
@@ -48,7 +50,7 @@ function Topbar() {
           bg-transparent
           outline-none
           text-white
-          placeholder:text-gray-500
+          placeholder:text-white
           w-full
           "
         />
@@ -56,31 +58,6 @@ function Topbar() {
 
       {/* RIGHT */}
       <div className="flex items-center gap-5">
-        {/* THEME TOGGLE */}
-        <button
-          onClick={toggleTheme}
-          className="
-          w-[58px]
-          h-[58px]
-          rounded-2xl
-          bg-white/[0.04]
-          border
-          border-white/10
-          flex
-          items-center
-          justify-center
-          hover:bg-white/[0.08]
-          transition-all
-          duration-300
-          "
-        >
-          {darkMode ? (
-            <Sun className="w-5 h-5 text-yellow-400" />
-          ) : (
-            <Moon className="w-5 h-5 text-black" />
-          )}
-        </button>
-
         {/* MESSAGE */}
         <button
           className="
@@ -89,7 +66,7 @@ function Topbar() {
           rounded-2xl
           bg-white/[0.04]
           border
-          border-white/10
+          border-black/5
           flex
           items-center
           justify-center
@@ -110,7 +87,7 @@ function Topbar() {
           rounded-2xl
           bg-white/[0.04]
           border
-          border-white/10
+          border-black/5
           flex
           items-center
           justify-center
@@ -142,14 +119,14 @@ function Topbar() {
           gap-4
           bg-white/[0.04]
           border
-          border-white/10
+          border-black/5
           px-4
           h-[58px]
           rounded-2xl
           "
         >
           <img
-            src="https://i.pravatar.cc/150?img=12"
+            src={user?.profile || "https://i.pravatar.cc/150?img=12"}
             alt="profile"
             className="
             w-11
@@ -160,9 +137,9 @@ function Topbar() {
           />
 
           <div className="hidden md:block">
-            <h3 className="font-bold text-white">Saad</h3>
+            <h3 className="font-bold text-white">{user?.fullname}</h3>
 
-            <p className="text-sm text-gray-400">@saad</p>
+            <p className="text-sm text-white">{user?.username}</p>
           </div>
         </div>
       </div>

@@ -31,24 +31,6 @@ function Sidebar() {
     },
 
     {
-      name: "Explore",
-      icon: Compass,
-      link: "/explore",
-    },
-
-    {
-      name: "Messages",
-      icon: MessageCircle,
-      link: "/messages",
-    },
-
-    {
-      name: "Notifications",
-      icon: Bell,
-      link: "/notifications",
-    },
-
-    {
       name: "Profile",
       icon: User,
       link: "/profile",
@@ -163,24 +145,29 @@ function Sidebar() {
         <button
           onClick={handleLogout}
           className="
-          w-full
-          h-[72px]
-          rounded-[28px]
-          bg-red-500/10
-          hover:bg-red-500/20
-          border
-          border-red-500/20
-          transition-all
-          duration-300
-          flex
-          items-center
-          justify-center
-          gap-4
-          text-red-400
-          font-bold
-          text-lg
-          shadow-[0_5px_20px_rgba(239,68,68,0.15)]
-          "
+    w-full
+    h-[72px]
+    rounded-[28px]
+    bg-gradient-to-r
+    from-red-500
+    via-rose-500
+    to-pink-500
+    hover:scale-[1.02]
+    hover:shadow-[0_12px_35px_rgba(239,68,68,0.35)]
+    transition-all
+    duration-300
+    flex
+    items-center
+    justify-center
+    gap-4
+    text-white
+    font-extrabold
+    text-lg
+    shadow-[0_8px_25px_rgba(239,68,68,0.22)]
+    border
+    border-white/40
+    backdrop-blur-xl
+    "
         >
           <LogOut className="w-6 h-6" />
           Logout
