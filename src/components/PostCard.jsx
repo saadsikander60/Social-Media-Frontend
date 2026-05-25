@@ -1,19 +1,36 @@
 "use client";
-import {
-  HeartStraight
-} from @phosphor-icons/react"
+import { Sparkles } from "lucide-react";
+import { useState } from "react";
 
-import {
-
-  MessageCircle,
-  Send,
-  Bookmark,
-  MoreHorizontal,
-} from "lucide-react";
+import { MessageCircle, Send, Bookmark, MoreHorizontal } from "lucide-react";
 
 import { formatDistanceToNow } from "date-fns";
 
 function PostCard({ post }) {
+  const [liked, setLiked] = useState(false);
+
+  const [likesCount, setLikesCount] = useState(post?.likesCount || 0);
+  const handleLike = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts/like/${post._id}`,
+        {
+          method: "POST",
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        setLiked(data.liked);
+        setLikesCount(data.likesCount);
+      }
+    } catch (error) {
+      console.log("LIKE ERROR:", error);
+    }
+  };
+
   return (
     <div
       className="
@@ -45,6 +62,7 @@ function PostCard({ post }) {
             w-14
             h-14
             rounded-2xl
+
             object-cover
             "
           />
@@ -129,12 +147,17 @@ function PostCard({ post }) {
         <div className="flex items-center justify-between mt-7">
           <div className="flex items-center gap-4">
             <button
+              onClick={handleLike}
               className="
               w-14
               h-14
               rounded-2xl
-              bg-white/[0.04]
-              hover:bg-red-500/20
+              group
+              bg-gradient-to-br from-white/[0.10] to-white/[0.03]
+              border border-white/10
+              hover:scale-110
+              active:scale-95
+              hover:shadow-[0_0_30px_rgba(168,85,247,0.45)]
               transition-all
               duration-300
               flex
@@ -142,11 +165,17 @@ function PostCard({ post }) {
               justify-center
               "
             >
-              <HeartStraight
-  size={28}
-  weight="fill"
-  className="text-white"
-/>
+              <Sparkles
+                className={`
+                  w-6
+                  h-6
+                  transition-all
+                  duration-300
+                  group-hover:rotate-12
+                  group-hover:scale-125
+                  ${liked ? "text-violet-400" : "text-white"}
+                `}
+              />
             </button>
 
             <button
@@ -205,7 +234,7 @@ function PostCard({ post }) {
 
         {/* STATS */}
         <div className="flex items-center gap-6 mt-6">
-          <p className="text-white font-semibold">{post?.likesCount} Likes</p>
+          <p className="text-white font-semibold">{likesCount} Likes</p>
 
           <p className="text-gray-400">{post?.commentsCount} Comments</p>
         </div>
