@@ -8,7 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
 import Stories from "@/components/Stories";
-import PostCard from "@/components/PostCard";
+import Feed from "@/components/Feed";
 import RightSidebar from "@/components/RightSidebar";
 
 function DashboardPage() {
@@ -62,13 +62,8 @@ function DashboardPage() {
             <Stories />
           </div>
 
-          {/* POSTS */}
-          <div className="mt-8 flex flex-col gap-8">
-            <PostCard />
-
-            <PostCard />
-
-            <PostCard />
+          <div className="mt-8">
+            <Feed />
           </div>
         </div>
 

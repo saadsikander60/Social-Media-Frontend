@@ -1,14 +1,19 @@
 "use client";
+import {
+  HeartStraight
+} from @phosphor-icons/react"
 
 import {
-  Heart,
+
   MessageCircle,
   Send,
   Bookmark,
   MoreHorizontal,
 } from "lucide-react";
 
-function PostCard() {
+import { formatDistanceToNow } from "date-fns";
+
+function PostCard({ post }) {
   return (
     <div
       className="
@@ -34,7 +39,7 @@ function PostCard() {
         {/* USER */}
         <div className="flex items-center gap-4">
           <img
-            src="https://i.pravatar.cc/150?img=12"
+            src={post?.owner?.profile}
             alt="user"
             className="
             w-14
@@ -45,9 +50,15 @@ function PostCard() {
           />
 
           <div>
-            <h3 className="text-lg font-bold text-white">Saad</h3>
+            <h3 className="text-lg font-bold text-white">
+              {post?.owner?.fullname}
+            </h3>
 
-            <p className="text-sm text-gray-500">2 mins ago</p>
+            <p className="text-sm text-gray-500">
+              {formatDistanceToNow(new Date(post?.createdAt), {
+                addSuffix: true,
+              })}
+            </p>
           </div>
         </div>
 
@@ -71,23 +82,51 @@ function PostCard() {
       </div>
 
       {/* IMAGE */}
-      <div className="px-6">
-        <img
-          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop"
-          alt="post"
-          className="
-          w-full
-          h-[500px]
-          object-cover
-          rounded-[28px]
-          "
-        />
-      </div>
+      {post?.images?.length > 0 && (
+        <div className="px-6">
+          <img
+            src={post.images[0]}
+            alt="post"
+            className="
+            w-full
+            h-[500px]
+            object-cover
+            rounded-[28px]
+            "
+          />
+        </div>
+      )}
+
+      {/* VIDEO */}
+      {post?.video && (
+        <div className="px-6">
+          <video
+            controls
+            className="
+            w-full
+            max-h-[600px]
+            rounded-[28px]
+            object-cover
+            "
+          >
+            <source src={post.video} type="video/mp4" />
+          </video>
+        </div>
+      )}
 
       {/* CONTENT */}
-      <div className="p-6">
+      <div className="p-6 pt-7">
+        {/* CAPTION */}
+        <p className="text-gray-300 leading-relaxed text-lg">
+          <span className="font-bold text-white mr-2">
+            {post?.owner?.fullname}
+          </span>
+
+          {post?.content}
+        </p>
+
         {/* ACTIONS */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-7">
           <div className="flex items-center gap-4">
             <button
               className="
@@ -103,7 +142,11 @@ function PostCard() {
               justify-center
               "
             >
-              <Heart className="w-6 h-6 text-white" />
+              <HeartStraight
+  size={28}
+  weight="fill"
+  className="text-white"
+/>
             </button>
 
             <button
@@ -162,16 +205,10 @@ function PostCard() {
 
         {/* STATS */}
         <div className="flex items-center gap-6 mt-6">
-          <p className="text-white font-semibold">12.5k Likes</p>
+          <p className="text-white font-semibold">{post?.likesCount} Likes</p>
 
-          <p className="text-gray-400">1.2k Comments</p>
+          <p className="text-gray-400">{post?.commentsCount} Comments</p>
         </div>
-
-        {/* CAPTION */}
-        <p className="text-gray-300 leading-relaxed mt-5 text-lg">
-          <span className="font-bold text-white mr-2">Saad</span>
-          Beautiful moments deserve beautiful memories ✨
-        </p>
       </div>
     </div>
   );
